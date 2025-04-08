@@ -332,11 +332,11 @@
 <!--                </a>-->
 <!--            </li>-->
 <!---->
-<!--            <li class="d-none d-sm-inline-block">-->
-<!--                <div class="nav-link" id="light-dark-mode">-->
-<!--                    <i class="ri-moon-line fs-22"></i>-->
-<!--                </div>-->
-<!--            </li>-->
+            <li class="d-none d-sm-inline-block">
+                <div class="nav-link" id="light-dark-mode">
+                    <i class="ri-moon-line fs-22"></i>
+                </div>
+            </li>
 
             <li class="dropdown">
                 <a class="nav-link dropdown-toggle arrow-none nav-user" data-bs-toggle="dropdown" href="#" role="button"
