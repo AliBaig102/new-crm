@@ -1,6 +1,7 @@
 <?php
 require_once 'core/index.php';
-//authRedirect();
+authRedirect();
+onlyAdminAccess();
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -15,12 +16,8 @@ require_once 'core/index.php';
     <!-- App favicon -->
     <link rel="shortcut icon" href="assets/images/favicon.ico">
 
-    <!-- Daterangepicker css -->
-    <link rel="stylesheet" href="assets/vendor/daterangepicker/daterangepicker.css">
-
-    <!-- Vector Map css -->
-    <link rel="stylesheet" href="assets/vendor/admin-resources/jquery.vectormap/jquery-jvectormap-1.2.2.css">
-
+    <!-- Datatables css -->
+    <link href="assets/vendor/datatables.net-bs5/css/dataTables.bootstrap5.min.css" rel="stylesheet" type="text/css"/>
     <!-- Theme Config Js -->
     <script src="assets/js/config.js"></script>
 
@@ -68,44 +65,56 @@ require_once 'core/index.php';
                 <div class="row">
                     <div class="col-12">
                         <div class="card">
+                            <?php
+                                displayErrorMessage();
+                                displaySuccessMessage();
+                            ?>
                             <div class="card-body">
-                                <form class="row">
-                                    <form action="actions/login.php" method="post" class="needs-validation" novalidate>
-                                        <div class="mb-3">
-                                            <label for="email_address" class="form-label">Email address</label>
-                                            <input class="form-control" name="email" type="email" id="email_address"
-                                                   required=""
-                                                   placeholder="Enter your email">
-                                            <div class="valid-feedback">
-                                                Looks good!
-                                            </div>
-                                            <div class="invalid-feedback">
-                                                please enter an email address.
-                                            </div>
-                                        </div>
-                                        <div class="mb-3">
-                                            <!--                                            <a href="auth-forgotpw.html" class="text-muted float-end"><small>Forgot-->
-                                            <!--                                                    your-->
-                                            <!--                                                    password?</small></a>-->
-                                            <label for="password" class="form-label">Password</label>
-                                            <input class="form-control" name="password" type="password" required=""
-                                                   id="password"
-                                                   placeholder="Enter your password">
-                                            <div class="valid-feedback">
-                                                Looks good!
-                                            </div>
-                                            <div class="invalid-feedback">
-                                                please enter a password.
-                                            </div>
-                                        </div>
-                                        <div class="mb-0 text-start">
-                                            <button class="btn btn-soft-primary w-100" type="submit"><i
-                                                    class="ri-login-circle-fill me-1"></i> <span class="fw-bold">Log
-                                                        In</span></button>
-                                        </div>
-
-                                    </form>
-                                </form>
+                                <h4 class="header-title">Booker Details</h4>
+                                <table id="datatable-buttons"
+                                       class="table table-striped dt-responsive nowrap w-100">
+                                    <thead>
+                                    <tr>
+                                        <th>Name</th>
+                                        <th>Email</th>
+                                        <th>Phone</th>
+                                        <th>Area</th>
+                                        <th width="50">Actions</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <?php
+                                    global $auth;
+                                    $data = $auth->getAllBookers();
+                                    if ($data['status'] == "success"):
+                                        foreach ($data['data'] as $booker):
+                                            ?>
+                                            <tr>
+                                                <td><?= $booker['name'] ?></td>
+                                                <td><?= $booker['email'] ?></td>
+                                                <td><?= $booker['phone'] ?></td>
+                                                <td><?= $booker['area'] ?></td>
+                                                <td class="text-center">
+                                                    <a href="actions/booker.php?action=delete&id=<?= $booker['id'] ?>"
+                                                       class="text-danger deleteAdmin"
+                                                       data-bs-toggle="tooltip" data-bs-placement="top"
+                                                       data-bs-custom-class="danger-tooltip" data-bs-title="Delete">
+                                                        <i class="ri-delete-bin-line"></i>
+                                                    </a>
+                                                </td>
+                                            </tr>
+                                        <?php
+                                        endforeach;
+                                    else:
+                                        ?>
+                                        <tr>
+                                            <td colspan="5" class="text-body text-center"><?= $data['message'] ?></td>
+                                        </tr>
+                                    <?php
+                                    endif;
+                                    ?>
+                                    </tbody>
+                                </table>
                             </div>
                         </div>
                     </div>
@@ -118,19 +127,6 @@ require_once 'core/index.php';
         </div>
         <!-- content -->
 
-        <!-- Footer Start -->
-        <footer class="footer">
-            <div class="container-fluid">
-                <div class="row">
-                    <div class="col-12 text-center">
-                        <script>document.write(new Date().getFullYear())</script>
-                        © Velonic - Theme by <b>Techzaa</b>
-                    </div>
-                </div>
-            </div>
-        </footer>
-        <!-- end Footer -->
-
     </div>
 
     <!-- ============================================================== -->
@@ -140,24 +136,61 @@ require_once 'core/index.php';
 <!-- END wrapper -->
 <!-- Vendor js -->
 <script src="assets/js/vendor.min.js"></script>
-
-<!-- Daterangepicker js -->
-<script src="assets/vendor/daterangepicker/moment.min.js"></script>
-<script src="assets/vendor/daterangepicker/daterangepicker.js"></script>
-
-<!-- Apex Charts js -->
-<script src="assets/vendor/apexcharts/apexcharts.min.js"></script>
-
-<!-- Vector Map js -->
-<script src="assets/vendor/admin-resources/jquery.vectormap/jquery-jvectormap-1.2.2.min.js"></script>
-<script src="assets/vendor/admin-resources/jquery.vectormap/maps/jquery-jvectormap-world-mill-en.js"></script>
-
-<!-- Dashboard App js -->
-<script src="assets/js/pages/dashboard.js"></script>
-
+<!-- Datatables js -->
+<script src="assets/vendor/datatables.net/js/jquery.dataTables.min.js"></script>
+<script src="assets/vendor/datatables.net-bs5/js/dataTables.bootstrap5.min.js"></script>
+<script src="assets/vendor/datatables.net-responsive/js/dataTables.responsive.min.js"></script>
+<script src="assets/vendor/datatables.net-responsive-bs5/js/responsive.bootstrap5.min.js"></script>
+<script src="assets/vendor/datatables.net-buttons/js/dataTables.buttons.min.js"></script>
+<script src="assets/vendor/datatables.net-buttons-bs5/js/buttons.bootstrap5.min.js"></script>
+<script src="assets/vendor/datatables.net-buttons/js/buttons.html5.min.js"></script>
+<script src="assets/vendor/datatables.net-buttons/js/buttons.flash.min.js"></script>
+<script src="assets/vendor/datatables.net-buttons/js/buttons.print.min.js"></script>
 
 <!-- App js -->
 <script src="assets/js/app.min.js"></script>
-
+<script>
+    $(document).ready(function () {
+        $('#datatable-buttons').DataTable({
+            dom: 'Bfrtip',
+            buttons: [
+                {
+                    text: '<i class="ri-user-add-line"></i> Add New Booker',
+                    className: 'mx-1 btn btn-dark',
+                    action: function () {
+                        location.href = "add-booker.php";
+                    }
+                },
+                {
+                    extend: 'csv',
+                    text: '<i class="ri-file-excel-2-line"></i> Export to CSV',
+                    className: 'mx-1 btn btn-success',
+                    title: 'All_Users',
+                    exportOptions: {
+                        columns: ':not(:last-child)'
+                    }
+                },
+                {
+                    extend: 'print',
+                    text: '<i class="ri-printer-line"></i> Print Preview',
+                    className: 'mx-1 btn btn-warning',
+                    title: 'All Users',
+                    exportOptions: {
+                        columns: ':not(:last-child)'
+                    }
+                },
+            ],
+            language: {
+                paginate: {
+                    previous: "<i class='ri-arrow-left-s-line'>",
+                    next: "<i class='ri-arrow-right-s-line'>"
+                }
+            },
+            drawCallback: function () {
+                $(".dataTables_paginate > .pagination").addClass("pagination-rounded")
+            }
+        });
+    })
+</script>
 </body>
 </html>

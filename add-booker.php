@@ -1,6 +1,7 @@
 <?php
 require_once 'core/index.php';
-//authRedirect();
+authRedirect();
+onlyAdminAccess();
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -14,13 +15,6 @@ require_once 'core/index.php';
 
     <!-- App favicon -->
     <link rel="shortcut icon" href="assets/images/favicon.ico">
-
-    <!-- Daterangepicker css -->
-    <link rel="stylesheet" href="assets/vendor/daterangepicker/daterangepicker.css">
-
-    <!-- Vector Map css -->
-    <link rel="stylesheet" href="assets/vendor/admin-resources/jquery.vectormap/jquery-jvectormap-1.2.2.css">
-
     <!-- Theme Config Js -->
     <script src="assets/js/config.js"></script>
 
@@ -69,38 +63,45 @@ require_once 'core/index.php';
                 <div class="row">
                     <div class="col-md-12">
                         <div class="card">
+                            <?php displaySuccessMessage();
+                            displayErrorMessage(); ?>
                             <div class="card-body">
                                 <h4 class="header-title">Booker Details</h4>
-                                <div class="p-2"> <?php displaySuccessMessage(); displayErrorMessage(); ?></div>
-                                <form action="actions/add-booker.php" method="post" class="needs-validation" novalidate>
+                                <form action="actions/booker.php?action=create" method="post" class="needs-validation"
+                                      novalidate>
 
                                     <div class="mb-3">
                                         <label for="name" class="form-label">Full Name</label>
-                                        <input type="text" class="form-control" id="name" name="name" required placeholder="Enter full name">
+                                        <input type="text" class="form-control" id="name" name="name" required
+                                               placeholder="Enter full name">
                                         <div class="invalid-feedback">Please enter a valid name.</div>
                                     </div>
 
                                     <div class="mb-3">
                                         <label for="email" class="form-label">Email Address</label>
-                                        <input type="email" class="form-control" id="email" name="email" required placeholder="Enter email">
+                                        <input type="email" class="form-control" id="email" name="email" required
+                                               placeholder="Enter email">
                                         <div class="invalid-feedback">Please enter a valid email.</div>
                                     </div>
 
                                     <div class="mb-3">
                                         <label for="phone" class="form-label">Phone Number</label>
-                                        <input type="tel" class="form-control" id="phone" name="phone" required placeholder="Enter phone number">
+                                        <input type="tel" class="form-control" id="phone" name="phone" required
+                                               placeholder="Enter phone number">
                                         <div class="invalid-feedback">Please enter a valid phone number.</div>
                                     </div>
 
                                     <div class="mb-3">
                                         <label for="area" class="form-label">Area</label>
-                                        <input type="text" class="form-control" id="area" name="area" required placeholder="Enter area">
+                                        <input type="text" class="form-control" id="area" name="area" required
+                                               placeholder="Enter area">
                                         <div class="invalid-feedback">Please enter an area.</div>
                                     </div>
 
                                     <div class="mb-3">
                                         <label for="password" class="form-label">Password</label>
-                                        <input type="password" class="form-control" id="password" name="password" required placeholder="Enter password">
+                                        <input type="password" class="form-control" id="password" name="password"
+                                               required placeholder="Enter password">
                                         <div class="invalid-feedback">Please enter a password.</div>
                                     </div>
 
@@ -120,19 +121,6 @@ require_once 'core/index.php';
         </div>
         <!-- content -->
 
-        <!-- Footer Start -->
-        <footer class="footer">
-            <div class="container-fluid">
-                <div class="row">
-                    <div class="col-12 text-center">
-                        <script>document.write(new Date().getFullYear())</script>
-                        © Velonic - Theme by <b>Techzaa</b>
-                    </div>
-                </div>
-            </div>
-        </footer>
-        <!-- end Footer -->
-
     </div>
 
     <!-- ============================================================== -->
@@ -142,22 +130,6 @@ require_once 'core/index.php';
 <!-- END wrapper -->
 <!-- Vendor js -->
 <script src="assets/js/vendor.min.js"></script>
-
-<!-- Daterangepicker js -->
-<script src="assets/vendor/daterangepicker/moment.min.js"></script>
-<script src="assets/vendor/daterangepicker/daterangepicker.js"></script>
-
-<!-- Apex Charts js -->
-<script src="assets/vendor/apexcharts/apexcharts.min.js"></script>
-
-<!-- Vector Map js -->
-<script src="assets/vendor/admin-resources/jquery.vectormap/jquery-jvectormap-1.2.2.min.js"></script>
-<script src="assets/vendor/admin-resources/jquery.vectormap/maps/jquery-jvectormap-world-mill-en.js"></script>
-
-<!-- Dashboard App js -->
-<script src="assets/js/pages/dashboard.js"></script>
-
-
 <!-- App js -->
 <script src="assets/js/app.min.js"></script>
 

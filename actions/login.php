@@ -14,3 +14,10 @@ if (isset($_POST['email'])) {
         redirectWithError('login.php',$result['message']);
     }
 }
+
+if (isset($_GET['logout'])) {
+    $result= $auth->logout();
+    if ($result['status']=='success') {
+        redirectWithSuccess('login.php', $result['message']);
+    }
+}

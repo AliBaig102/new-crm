@@ -140,4 +140,32 @@ class Auth
             return $this->response("error", "Password reset failed!", $e->getMessage());
         }
     }
+
+    public function getAllBookers(): array
+    {
+        try {
+            $stmt = $this->pdo->prepare("SELECT id, name, email, phone, area, role, created_at from users where role = 'booker'");
+            $stmt->execute();
+            $bookers = $stmt->fetchAll();
+            if (count($bookers) > 0) {
+                return $this->response("success", "Bookers retrieved successfully!", $bookers);
+            } else {
+                return $this->response("error", "No bookers available!");
+            }
+
+        } catch (PDOException $e) {
+            return $this->response("error", "Bookers not found!", $e->getMessage());
+        }
+    }
+
+    public function deleteBooker($id): array
+    {
+        try {
+            $stmt = $this->pdo->prepare("delete from users where id = :id");
+            $stmt->execute(['id' => $id]);
+            return $this->response("success", "Booker deleted successfully!");
+        } catch (PDOException $e) {
+            return $this->response("error", "Booker delete failed!", $e->getMessage());
+        }
+    }
 }

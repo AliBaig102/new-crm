@@ -1,4 +1,6 @@
 <?php
+$user_role = getRole();
+
 $navigation = [
     [
         "title" => "Main",
@@ -7,7 +9,8 @@ $navigation = [
                 "name" => "Dashboard",
                 "icon" => "ri-dashboard-3-line",
                 "url" => "dashboard.php",
-                "submenu" => []
+                "submenu" => [],
+                "roles" => ["admin", "booker"]
             ],
             [
                 "name" => "Booker",
@@ -18,15 +21,18 @@ $navigation = [
                     [
                         "name" => "Add Booker",
                         "url" => "add-booker.php",
+                        "roles" => ["admin"]
                     ],
                     [
                         "name" => "All Booker",
                         "url" => "all-booker.php",
+                        "roles" => ["admin"]
                     ]
-                ]
+                ],
+                "roles" => ["admin"]
             ],
             [
-                "name" => "Books",
+                "name" => "Reporting",
                 "icon" => "ri-pages-line",
                 "url" => "#",
                 "submenu_id" => "BooksPages",
@@ -34,12 +40,15 @@ $navigation = [
                     [
                         "name" => "Add Book",
                         "url" => "add-books.php",
+                        "roles" => ["admin"]
                     ],
                     [
                         "name" => "All Book",
                         "url" => "all-books.php",
+                        "roles" => ["admin", "booker"]
                     ]
-                ]
+                ],
+                "roles" => ["admin", "booker"]
             ]
         ]
     ]
@@ -76,23 +85,37 @@ $navigation = [
                 <li class="side-nav-title"><?= $section['title']; ?></li>
 
                 <?php foreach ($section['items'] as $item): ?>
+                    <?php if (!in_array($user_role, $item['roles'])) continue; ?>
+
+                    <?php
+                    // Filter visible submenu items
+                    $visibleSubmenu = [];
+                    if (!empty($item['submenu'])) {
+                        foreach ($item['submenu'] as $subItem) {
+                            if (in_array($user_role, $subItem['roles'])) {
+                                $visibleSubmenu[] = $subItem;
+                            }
+                        }
+                    }
+                    ?>
+
                     <li class="side-nav-item">
                         <a
-                                href="<?= empty($item['submenu']) ? $item['url'] : '#' . $item['submenu_id']; ?>"
+                                href="<?= empty($visibleSubmenu) ? $item['url'] : '#' . $item['submenu_id']; ?>"
                                 class="side-nav-link"
-                            <?= !empty($item['submenu']) ? 'data-bs-toggle="collapse" aria-expanded="false" aria-controls="' . $item['submenu_id'] . '"' : ''; ?>
+                            <?= !empty($visibleSubmenu) ? 'data-bs-toggle="collapse" aria-expanded="false" aria-controls="' . $item['submenu_id'] . '"' : ''; ?>
                         >
                             <i class="<?= $item['icon']; ?>"></i>
                             <span> <?= $item['name']; ?> </span>
-                            <?php if (!empty($item['submenu'])): ?>
+                            <?php if (!empty($visibleSubmenu)): ?>
                                 <span class="menu-arrow"></span>
                             <?php endif; ?>
                         </a>
 
-                        <?php if (!empty($item['submenu'])): ?>
+                        <?php if (!empty($visibleSubmenu)): ?>
                             <div class="collapse" id="<?= $item['submenu_id']; ?>">
                                 <ul class="side-nav-second-level">
-                                    <?php foreach ($item['submenu'] as $subItem): ?>
+                                    <?php foreach ($visibleSubmenu as $subItem): ?>
                                         <li>
                                             <a href="<?= $subItem['url']; ?>"><?= $subItem['name']; ?></a>
                                         </li>
